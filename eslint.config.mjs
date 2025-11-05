@@ -19,6 +19,10 @@ const eslintConfig = [
         },
       },
     },
+    rules: {
+      // ✅ Allow JSON imports using require() (needed for Lottie JSON)
+      "@typescript-eslint/no-require-imports": "off",
+    },
     ignores: [
       "node_modules/**",
       ".next/**",

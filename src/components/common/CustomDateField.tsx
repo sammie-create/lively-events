@@ -142,10 +142,32 @@
 
 import { useState } from "react";
 import { CalendarDays, Pencil } from "lucide-react";
+import {
+  FieldValues,
+  Path,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
 
-export default function CustomDateField({ label, register, fieldName }: any) {
-  const [value, setValue] = useState("");
+type CustomDateFieldProps<TFormValues extends FieldValues> = {
+  label: string;
+  fieldName: Path<TFormValues>;
+  register: UseFormRegister<TFormValues>;
+  setValue: UseFormSetValue<TFormValues>;
+  watch: UseFormWatch<TFormValues>;
+};
+
+function CustomDateField<TFormValues extends FieldValues>({
+  label,
+  fieldName,
+  register,
+  setValue,
+  watch,
+}: CustomDateFieldProps<TFormValues>) {
   const [editing, setEditing] = useState(false);
+
+  const value = watch(fieldName);
 
   const formatDate = (val: string) => {
     if (!val) return "";
@@ -189,7 +211,7 @@ export default function CustomDateField({ label, register, fieldName }: any) {
             type="datetime-local"
             {...register(fieldName)}
             value={value}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setValue(fieldName, e.target.value as any)}
             onBlur={() => setEditing(false)} // Exit edit mode when unfocused
             className="bg-transparent outline-none text-white/80 cursor-text"
             autoFocus
@@ -222,3 +244,5 @@ export default function CustomDateField({ label, register, fieldName }: any) {
     </div>
   );
 }
+
+export default CustomDateField;

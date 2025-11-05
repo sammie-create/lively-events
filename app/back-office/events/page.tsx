@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Search, X } from "lucide-react";
+import EmptyCalendar from "@/assets/images/empty_calendar.svg";
 
 export default function EventsPage() {
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
@@ -79,7 +80,7 @@ export default function EventsPage() {
         {activeTab === "upcoming" ? (
           <div className="flex flex-col items-center justify-center">
             <Image
-              src="/images/empty_calendar.svg"
+              src={EmptyCalendar}
               alt="No events icon"
               width={180}
               height={180}

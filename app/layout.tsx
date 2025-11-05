@@ -29,7 +29,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${urbanist.variable} ${fraunces.variable}`}>
-      <body className="min-h-screen overflow-x-hidden text-white font-urbanist">
+      <body className="min-h-screen overflow-auto text-white font-urbanist">
         {/* === Background Layers === */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,85,34,0.12),_transparent_60%)]" />
         <Image

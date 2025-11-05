@@ -8,6 +8,8 @@ import Image from "next/image";
 import { MapPin, Image as ImageIcon, PencilLine, Check } from "lucide-react";
 import { toast } from "sonner"; // ✅ Import toast
 import CustomDateField from "@/components/common/CustomDateField";
+import SelectField from "@/components/common/SelectField";
+import FormGradient from "@/assets/images/form_gradient.png";
 
 const createEventSchema = z.object({
   name: z.string().min(3, "Event name is required"),
@@ -57,6 +59,7 @@ export default function CreateEventPage() {
     formState: { errors },
     reset,
     watch,
+    setValue,
   } = useForm<CreateEventForm>({
     resolver: zodResolver(createEventSchema),
   });
@@ -109,7 +112,7 @@ export default function CreateEventPage() {
       {/* === Main Form === */}
       <div className="w-full">
         <Image
-          src="/images/form_gradient.png"
+          src={FormGradient}
           width={1000}
           height={50}
           alt="Form gradient"
@@ -201,11 +204,15 @@ export default function CreateEventPage() {
                     label="Start Date & Time"
                     register={register}
                     fieldName="startDate"
+                    setValue={setValue}
+                    watch={watch}
                   />
                   <CustomDateField
                     label="End Date & Time"
                     register={register}
                     fieldName="endDate"
+                    setValue={setValue}
+                    watch={watch}
                   />
                 </div>
 
@@ -263,20 +270,42 @@ export default function CreateEventPage() {
 
           <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
 
-          <div className="flex">
-            <label className="mb-2 text-base w-[40%] font-medium">
-              Category of Event
-              <p className="text-xs italic text-[#A5AEC0B8]">
-                Select the capacity your event
-              </p>
-            </label>
-            <textarea
-              {...register("description")}
-              rows={4}
-              placeholder="Type in your description"
-              className="w-full px-4 py-3 text-sm rounded-md outline-none resize-none bg-white/10 text-white/65 placeholder:text-white/40"
-            />
-          </div>
+          <SelectField
+            label="Category of Event"
+            description="Select the category of your event"
+            fieldName="category"
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+            staticOptions={[
+              "Conference",
+              "Religion",
+              "Concert",
+              "Sports",
+              "Exhibition",
+              "Comedy Show",
+              "Charity Event",
+            ]}
+          />
+
+          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+
+          <SelectField
+            label="Capacity of Event"
+            description="Select the capacity of your event"
+            fieldName="capacity"
+            register={register}
+            setValue={setValue}
+            errors={errors}
+            watch={watch}
+            staticOptions={[
+              "Small (0–50)",
+              "Medium (50–200)",
+              "Large (200+)",
+              "Unlimited",
+            ]}
+          />
 
           {/* Action Buttons */}
           <div className="flex justify-between mt-10">
