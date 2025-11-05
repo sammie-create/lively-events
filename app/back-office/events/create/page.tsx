@@ -61,7 +61,7 @@ export default function CreateEventPage() {
     watch,
     setValue,
   } = useForm<CreateEventForm>({
-    resolver: zodResolver(createEventSchema),
+    // resolver: zodResolver(createEventSchema),
   });
 
   const onSubmit: SubmitHandler<CreateEventForm> = data => {
