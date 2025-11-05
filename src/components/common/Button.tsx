@@ -3,6 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import Lottie from "lottie-react";
+import Loader from "@/assets/lottie/Loader.json";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
@@ -55,7 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {loading ? (
         <Lottie
-          animationData={require("@/../public/lottie/Loader.json")}
+          animationData={Loader}
           loop
           autoplay
           style={{ width: loaderSize, height: loaderSize }}

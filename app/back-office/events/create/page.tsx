@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -61,7 +61,7 @@ export default function CreateEventPage() {
     resolver: zodResolver(createEventSchema),
   });
 
-  const onSubmit = (data: CreateEventForm) => {
+  const onSubmit: SubmitHandler<CreateEventForm> = data => {
     console.log("Form Submitted:", data);
 
     toast.promise(

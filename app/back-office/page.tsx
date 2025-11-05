@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/common/Button";
+import HeroImage from "@/assets/images/hero_image.png";
+import Logo from "@/assets/images/logo.svg";
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,12 +23,12 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen">
+    <div className="relative flex h-screen overflow-hidden">
       {/* ===== Left Section ===== */}
       <div className="relative z-10 flex flex-col items-center justify-center px-8 lg:px-[58px] min-h-screen w-full lg:w-1/2">
         {/* Logo */}
         <Image
-          src="/images/logo.svg"
+          src={Logo}
           alt="Lively Events Logo"
           width={110}
           height={50}
@@ -110,10 +112,10 @@ function LoginPage() {
       </div>
 
       {/* ===== Right Section (Image) ===== */}
-      <div className="relative items-center justify-center hidden w-full overflow-hidden lg:flex">
+      <div className="relative items-center justify-center w-full overflow-hidden lg:flex">
         <div className="relative lg:w-[760px] xl:w-[1160px] h-full rounded-tl-[72px] rounded-br-[72px] overflow-hidden shadow-lg">
           <Image
-            src="/images/hero_image.png"
+            src={HeroImage}
             alt="3D Sphere Hero"
             fill
             className="object-cover"
