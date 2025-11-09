@@ -274,7 +274,6 @@ export default function CreateEventPage() {
             label="Category of Event"
             description="Select the category of your event"
             fieldName="category"
-            register={register}
             setValue={setValue}
             watch={watch}
             errors={errors}
@@ -295,7 +294,6 @@ export default function CreateEventPage() {
             label="Capacity of Event"
             description="Select the capacity of your event"
             fieldName="capacity"
-            register={register}
             setValue={setValue}
             errors={errors}
             watch={watch}

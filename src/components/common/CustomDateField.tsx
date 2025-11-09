@@ -138,10 +138,119 @@
 // //   );
 // // }
 
+// "use client";
+
+// import { useState } from "react";
+// import { CalendarDays, Pencil } from "lucide-react";
+// import {
+//   FieldValues,
+//   Path,
+//   UseFormRegister,
+//   UseFormSetValue,
+//   UseFormWatch,
+// } from "react-hook-form";
+
+// type CustomDateFieldProps<TFormValues extends FieldValues> = {
+//   label: string;
+//   fieldName: Path<TFormValues>;
+//   register: UseFormRegister<TFormValues>;
+//   setValue: UseFormSetValue<TFormValues>;
+//   watch: UseFormWatch<TFormValues>;
+// };
+
+// function CustomDateField<TFormValues extends FieldValues>({
+//   label,
+//   fieldName,
+//   register,
+//   setValue,
+//   watch,
+// }: CustomDateFieldProps<TFormValues>) {
+//   const [editing, setEditing] = useState(false);
+
+//   const value = watch(fieldName);
+
+//   const formatDate = (val: string) => {
+//     if (!val) return "";
+//     const date = new Date(val);
+
+//     const day = date.toLocaleDateString("en-GB", {
+//       weekday: "short",
+//       day: "numeric",
+//       month: "short",
+//       year: "numeric",
+//     });
+
+//     return day;
+//   };
+
+//   const formatTime = (val: string) => {
+//     if (!val) return "";
+//     const date = new Date(val);
+//     const time = date
+//       .toLocaleTimeString("en-US", {
+//         hour: "numeric",
+//         minute: "2-digit",
+//         hour12: true,
+//       })
+//       .replace(" ", ""); // removes space before AM/PM
+
+//     return time.toUpperCase();
+//   };
+
+//   return (
+//     <div className="flex items-center justify-between px-6 py-1 rounded-md bg-white/10 backdrop-blur-sm">
+//       <div className="flex items-center gap-2">
+//         <CalendarDays size={14} className="text-white/80" />
+//         <label className="text-base text-white/80">{label}</label>
+//       </div>
+
+//       <div className="flex items-center gap-2 px-3">
+//         {/* If editing, show input */}
+//         {editing ? (
+//           <input
+//             type="datetime-local"
+//             {...register(fieldName)}
+//             value={value}
+//             onChange={e => setValue(fieldName, e.target.value as any)}
+//             onBlur={() => setEditing(false)} // Exit edit mode when unfocused
+//             className="bg-transparent outline-none text-white/80 cursor-text"
+//             autoFocus
+//           />
+//         ) : (
+//           // Otherwise show formatted date text
+//           <button
+//             type="button"
+//             onClick={() => setEditing(true)}
+//             className="flex items-center text-base text-white/80"
+//           >
+//             {value ? (
+//               <div className="flex gap-0.5">
+//                 <span className="px-3 py-2 rounded-l-lg bg-white/10">
+//                   {formatDate(value)}
+//                 </span>{" "}
+//                 <span className="px-3 py-2 rounded-r-lg bg-white/10">
+//                   {formatTime(value)}
+//                 </span>
+//               </div>
+//             ) : (
+//               <span className="px-3 py-2 rounded-md bg-white/10">
+//                 {"Set date & time"}
+//               </span>
+//             )}
+//             {/* <Pencil size={14} className="text-white/60 hover:text-white/90" /> */}
+//           </button>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default CustomDateField;
+
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, Pencil } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import {
   FieldValues,
   Path,
@@ -150,13 +259,13 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 
-type CustomDateFieldProps<TFormValues extends FieldValues> = {
+interface CustomDateFieldProps<TFormValues extends FieldValues> {
   label: string;
   fieldName: Path<TFormValues>;
   register: UseFormRegister<TFormValues>;
   setValue: UseFormSetValue<TFormValues>;
   watch: UseFormWatch<TFormValues>;
-};
+}
 
 function CustomDateField<TFormValues extends FieldValues>({
   label,
@@ -166,35 +275,35 @@ function CustomDateField<TFormValues extends FieldValues>({
   watch,
 }: CustomDateFieldProps<TFormValues>) {
   const [editing, setEditing] = useState(false);
+  const value = watch(fieldName) as string | undefined;
 
-  const value = watch(fieldName);
-
-  const formatDate = (val: string) => {
+  const formatDate = (val?: string) => {
     if (!val) return "";
     const date = new Date(val);
-
-    const day = date.toLocaleDateString("en-GB", {
+    return date.toLocaleDateString("en-GB", {
       weekday: "short",
       day: "numeric",
       month: "short",
       year: "numeric",
     });
-
-    return day;
   };
 
-  const formatTime = (val: string) => {
+  const formatTime = (val?: string) => {
     if (!val) return "";
     const date = new Date(val);
-    const time = date
+    return date
       .toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
       })
-      .replace(" ", ""); // removes space before AM/PM
+      .replace(" ", "")
+      .toUpperCase();
+  };
 
-    return time.toUpperCase();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(fieldName, newValue as TFormValues[typeof fieldName]);
   };
 
   return (
@@ -205,19 +314,17 @@ function CustomDateField<TFormValues extends FieldValues>({
       </div>
 
       <div className="flex items-center gap-2 px-3">
-        {/* If editing, show input */}
         {editing ? (
           <input
             type="datetime-local"
             {...register(fieldName)}
-            value={value}
-            onChange={e => setValue(fieldName, e.target.value as any)}
-            onBlur={() => setEditing(false)} // Exit edit mode when unfocused
+            value={value || ""}
+            onChange={handleChange}
+            onBlur={() => setEditing(false)}
             className="bg-transparent outline-none text-white/80 cursor-text"
             autoFocus
           />
         ) : (
-          // Otherwise show formatted date text
           <button
             type="button"
             onClick={() => setEditing(true)}
@@ -227,17 +334,16 @@ function CustomDateField<TFormValues extends FieldValues>({
               <div className="flex gap-0.5">
                 <span className="px-3 py-2 rounded-l-lg bg-white/10">
                   {formatDate(value)}
-                </span>{" "}
+                </span>
                 <span className="px-3 py-2 rounded-r-lg bg-white/10">
                   {formatTime(value)}
                 </span>
               </div>
             ) : (
               <span className="px-3 py-2 rounded-md bg-white/10">
-                {"Set date & time"}
+                Set date & time
               </span>
             )}
-            {/* <Pencil size={14} className="text-white/60 hover:text-white/90" /> */}
           </button>
         )}
       </div>
