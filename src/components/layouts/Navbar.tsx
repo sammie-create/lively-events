@@ -12,9 +12,9 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const tabs = [
-    { label: "My Events", href: "/events" },
-    { label: "Calendars", href: "/calendars" },
-    { label: "Discover", href: "/discover" },
+    { label: "My Events", href: "/back-office/events" },
+    { label: "Calendars", href: "/back-office/calendars" },
+    { label: "Discover", href: "/back-office/discover" },
   ];
 
   return (
@@ -54,7 +54,7 @@ export default function Navbar() {
       <div className="flex items-center gap-5">
         {/* Create Event Button */}
         <Link
-          href="/events/create"
+          href="/back-office/events/create"
           className="hidden lg:flex items-center gap-2 bg-[#2B0A0C] hover:bg-[#C13927]/90 hover:shadow-[0_0_12px_rgba(193,57,39,0.5)] text-[#F47B20] hover:text-white font-urbanist text-sm font-medium rounded-[6px] px-4 py-2 transition-all duration-300"
         >
           <Plus size={16} />
@@ -109,7 +109,7 @@ export default function Navbar() {
 
           {/* Create Event Button in Mobile */}
           <Link
-            href="/events/create"
+            href="/back-office/events/create"
             onClick={() => setMenuOpen(false)}
             className="mt-4 flex items-center gap-2 bg-[#C13927] hover:bg-[#a8181d] text-white font-urbanist text-sm font-medium rounded-[6px] px-4 py-2 transition-all duration-300"
           >

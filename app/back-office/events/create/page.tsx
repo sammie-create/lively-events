@@ -5,7 +5,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { MapPin, Image as ImageIcon, PencilLine, Check } from "lucide-react";
+import {
+  MapPin,
+  Image as ImageIcon,
+  PencilLine,
+  Check,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner"; // ✅ Import toast
 import CustomDateField from "@/components/common/CustomDateField";
 import SelectField from "@/components/common/SelectField";
@@ -32,6 +38,10 @@ export default function CreateEventPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [dateValue, setDateValue] = useState("");
   const [formatted, setFormatted] = useState("");
+
+  const [paymentCategories, setPaymentCategories] = useState<
+    { name: string; amount: string }[]
+  >([{ name: "", amount: "" }]);
 
   function formatDate(value: string) {
     if (!value) return "";
@@ -65,7 +75,14 @@ export default function CreateEventPage() {
   });
 
   const onSubmit: SubmitHandler<CreateEventForm> = data => {
-    console.log("Form Submitted:", data);
+    const finalData = {
+      ...data,
+      payment: isPaid,
+      paymentCategories: isPaid ? paymentCategories : [],
+    };
+
+    console.log("Event Data:", finalData);
+    // console.log("Form Submitted:", data);
 
     toast.promise(
       new Promise(resolve => setTimeout(resolve, 1500)), // simulate delay
@@ -95,6 +112,24 @@ export default function CreateEventPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     setPreview(URL.createObjectURL(file));
+  };
+
+  const addPaymentCategory = () => {
+    setPaymentCategories([...paymentCategories, { name: "", amount: "" }]);
+  };
+
+  const removePaymentCategory = (index: number) => {
+    setPaymentCategories(paymentCategories.filter((_, i) => i !== index));
+  };
+
+  const handlePaymentChange = (
+    index: number,
+    field: "name" | "amount",
+    value: string
+  ) => {
+    const updated = [...paymentCategories];
+    updated[index][field] = value;
+    setPaymentCategories(updated);
   };
 
   return (
@@ -222,7 +257,7 @@ export default function CreateEventPage() {
                 <div className="flex items-center px-6 py-4 mt-5 rounded-md justify-self-end bg-white/10 backdrop-blur-sm">
                   <MapPin size={16} className="mr-2 text-white/80" />
                   <input
-                    autoFocus
+                    // autoFocus
                     {...register("location")}
                     placeholder="Add Event Location"
                     className="w-full text-base text-white bg-transparent outline-none placeholder:text-white/80"
@@ -253,7 +288,7 @@ export default function CreateEventPage() {
 
           <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
 
-          <div className="flex">
+          {/* <div className="flex">
             <label className="mb-2 text-base w-[40%] font-medium">
               Category of Event
               <p className="text-xs italic text-[#A5AEC0B8]">
@@ -266,9 +301,9 @@ export default function CreateEventPage() {
               placeholder="Type in your description"
               className="w-full px-4 py-3 text-sm rounded-md outline-none resize-none bg-white/10 text-white/65 placeholder:text-white/40"
             />
-          </div>
+          </div> */}
 
-          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+          {/* <hr className="h-[1px] bg-[#E4E7EC29] border-none" /> */}
 
           <SelectField
             label="Category of Event"
@@ -304,6 +339,113 @@ export default function CreateEventPage() {
               "Unlimited",
             ]}
           />
+
+          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+
+          {/* === Payment Toggle === */}
+          <div className="flex w-full">
+            <label className="mb-2 text-base w-[40%] font-medium">
+              Payments
+              <p className="text-xs italic text-[#A5AEC0B8]">
+                Select Yes or No for Payment
+              </p>
+            </label>
+
+            <div className="flex w-full">
+              {/* Yes Tab */}
+              <button
+                type="button"
+                onClick={() => setIsPaid(true)}
+                className={`px-4 py-1 rounded-l-md border ${
+                  isPaid
+                    ? "bg-[#FFFFFF] text-[#FF6825] border-transparent"
+                    : "bg-transparent border-white/20 text-white/70 hover:bg-white/10"
+                }`}
+              >
+                Yes
+              </button>
+
+              {/* No Tab */}
+              <button
+                type="button"
+                onClick={() => setIsPaid(false)}
+                className={`px-4 py-1 rounded-r-md border ${
+                  !isPaid
+                    ? "bg-[#FFFFFF] text-[#FF6825] border-transparent"
+                    : "bg-transparent border-white/20 text-white/70 hover:bg-white/10"
+                }`}
+              >
+                No
+              </button>
+            </div>
+          </div>
+
+          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+
+          {/* === Payment Category Section (only if paid) === */}
+          {isPaid && (
+            <div className="flex flex-col w-full gap-6 mt-4">
+              <div className="flex">
+                <label className="mb-2 text-base w-[40%] font-medium">
+                  Payment Category
+                  <p className="text-xs italic text-[#A5AEC0B8]">
+                    Enter payment categories and their prices
+                  </p>
+                </label>
+
+                <div className="flex flex-col w-full gap-3">
+                  {paymentCategories.map((cat, index) => (
+                    <>
+                      {index >= 1 && (
+                        <hr className="h-[1px] my-2 bg-[#E4E7EC29] border-none md:col-span-3" />
+                      )}
+                      <div
+                        key={index}
+                        className="grid w-full grid-col-1 md:grid-cols-[minmax(500px,_1fr)_70px] md:grid-rows-2 gap-3"
+                      >
+                        <input
+                          type="text"
+                          placeholder="Category name (e.g. VIP)"
+                          value={cat.name}
+                          onChange={e =>
+                            handlePaymentChange(index, "name", e.target.value)
+                          }
+                          className="px-3 py-2 text-sm text-white rounded-md outline-none bg-white/10 backdrop-blur-sm placeholder:text-white/40"
+                        />
+                        <input
+                          type="number"
+                          placeholder="Amount"
+                          value={cat.amount}
+                          onChange={e =>
+                            handlePaymentChange(index, "amount", e.target.value)
+                          }
+                          className="row-start-2 gap-3 px-3 py-2 text-sm text-white rounded-md outline-none bg-white/10 backdrop-blur-sm placeholder:text-white/40"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() => removePaymentCategory(index)}
+                          className="flex items-center justify-center row-span-2 text-sm transition rounded-md outline-none text-red-400/50 bg-white/10 backdrop-blur-sm hover:bg-red-500/20"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </div>
+                    </>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addPaymentCategory}
+                    className="self-start mt-2 text-sm italic text-[#9D9A96] hover:text-[#FF6825]/50 transition"
+                  >
+                    + Add another payment category
+                  </button>
+                </div>
+              </div>
+
+              <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex justify-between mt-10">
