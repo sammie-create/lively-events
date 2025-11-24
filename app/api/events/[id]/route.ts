@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 const mockEvents = [
   {
@@ -44,10 +44,11 @@ const mockEvents = [
 ];
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const event = mockEvents.find(e => e.id === params?.id);
+  const { id } = await context.params;
+  const event = mockEvents.find(e => e.id === id);
   console.log(event);
 
   if (!event) {
