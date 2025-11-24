@@ -198,7 +198,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
-  columns: ColumnDef<Guest, any>[];
+  columns: ColumnDef<Guest>[];
   eventId: string;
 }
 
