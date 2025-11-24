@@ -22,11 +22,7 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
 });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${urbanist.variable} ${fraunces.variable}`}>
       <body className="min-h-screen overflow-auto text-white font-urbanist">
@@ -50,3 +46,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+export default RootLayout;

@@ -32,7 +32,7 @@ const createEventSchema = z.object({
 
 type CreateEventForm = z.infer<typeof createEventSchema>;
 
-export default function CreateEventPage() {
+function CreateEventPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [isPaid, setIsPaid] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -286,7 +286,7 @@ export default function CreateEventPage() {
             />
           </div>
 
-          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+          <hr className="h-[1px] bg-[#E4E7EC]/20 border-none" />
 
           {/* <div className="flex">
             <label className="mb-2 text-base w-[40%] font-medium">
@@ -323,7 +323,7 @@ export default function CreateEventPage() {
             ]}
           />
 
-          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+          <hr className="h-[1px] bg-[#E4E7EC]/20 border-none" />
 
           <SelectField
             label="Capacity of Event"
@@ -340,7 +340,7 @@ export default function CreateEventPage() {
             ]}
           />
 
-          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+          <hr className="h-[1px] bg-[#E4E7EC]/20 border-none" />
 
           {/* === Payment Toggle === */}
           <div className="flex w-full">
@@ -356,9 +356,9 @@ export default function CreateEventPage() {
               <button
                 type="button"
                 onClick={() => setIsPaid(true)}
-                className={`px-4 py-1 rounded-l-md border ${
+                className={`px-4 py-1 rounded-l-lg border text-sm ${
                   isPaid
-                    ? "bg-[#FFFFFF] text-[#FF6825] border-transparent"
+                    ? "bg-[#FFFFFF] text-[#F47B20] border-transparent"
                     : "bg-transparent border-white/20 text-white/70 hover:bg-white/10"
                 }`}
               >
@@ -369,7 +369,7 @@ export default function CreateEventPage() {
               <button
                 type="button"
                 onClick={() => setIsPaid(false)}
-                className={`px-4 py-1 rounded-r-md border ${
+                className={`px-4 py-1 rounded-r-lg border text-sm ${
                   !isPaid
                     ? "bg-[#FFFFFF] text-[#FF6825] border-transparent"
                     : "bg-transparent border-white/20 text-white/70 hover:bg-white/10"
@@ -380,7 +380,7 @@ export default function CreateEventPage() {
             </div>
           </div>
 
-          <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+          <hr className="h-[1px] bg-[#E4E7EC]/20 border-none" />
 
           {/* === Payment Category Section (only if paid) === */}
           {isPaid && (
@@ -395,7 +395,7 @@ export default function CreateEventPage() {
 
                 <div className="flex flex-col w-full gap-3">
                   {paymentCategories.map((cat, index) => (
-                    <>
+                    <div key={index}>
                       {index >= 1 && (
                         <hr className="h-[1px] my-2 bg-[#E4E7EC29] border-none md:col-span-3" />
                       )}
@@ -405,22 +405,31 @@ export default function CreateEventPage() {
                       >
                         <input
                           type="text"
-                          placeholder="Category name (e.g. VIP)"
+                          placeholder="Category name (e.g. Employed)"
                           value={cat.name}
                           onChange={e =>
                             handlePaymentChange(index, "name", e.target.value)
                           }
-                          className="px-3 py-2 text-sm text-white rounded-md outline-none bg-white/10 backdrop-blur-sm placeholder:text-white/40"
+                          className="px-3.5 py-2.5 text-base text-white rounded-lg outline-none bg-white/10 backdrop-blur-sm placeholder:text-white/40"
                         />
-                        <input
-                          type="number"
-                          placeholder="Amount"
-                          value={cat.amount}
-                          onChange={e =>
-                            handlePaymentChange(index, "amount", e.target.value)
-                          }
-                          className="row-start-2 gap-3 px-3 py-2 text-sm text-white rounded-md outline-none bg-white/10 backdrop-blur-sm placeholder:text-white/40"
-                        />
+                        <div className="flex row-start-2 rounded-lg outline-none bg-white/10 backdrop-blur-sm ">
+                          <span className="text-base pl-3.5 border rounded-l-lg py-2.5 text-[#BAB6B6] border-r border-[#D0D5DD]/20 pr-3">
+                            NGN (₦)
+                          </span>
+                          <input
+                            type="number"
+                            placeholder="0.00"
+                            value={cat.amount}
+                            onChange={e =>
+                              handlePaymentChange(
+                                index,
+                                "amount",
+                                e.target.value
+                              )
+                            }
+                            className="flex-1 px-3.5 text-base bg-transparent outline-none appearance-none placeholder:text-white/64"
+                          />
+                        </div>
 
                         <button
                           type="button"
@@ -430,7 +439,7 @@ export default function CreateEventPage() {
                           <Trash2 size={20} />
                         </button>
                       </div>
-                    </>
+                    </div>
                   ))}
 
                   <button
@@ -443,22 +452,22 @@ export default function CreateEventPage() {
                 </div>
               </div>
 
-              <hr className="h-[1px] bg-[#E4E7EC29] border-none" />
+              <hr className="h-[1px] bg-[#E4E7EC]/20 border-none" />
             </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex justify-between mt-10">
+          <div className="flex gap-2 mt-10">
             <button
               type="button"
               onClick={() => toast.info("Event creation cancelled")}
-              className="bg-[#1C0F0F]/70 hover:bg-[#2C0E0E] text-white/90 px-8 py-3 rounded-md border border-white/10 transition"
+              className="bg-[#FFFFFF]/10 hover:bg-[#FFFFFF]/20 w-full text-white py-2.5 rounded-lg border border-[#D0D5DD]/20 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-[#C9402F] hover:bg-[#E74A3B] text-white px-8 py-3 rounded-md font-medium transition"
+              className="bg-[#C13927] border border-[#C13927] hover:bg-[#E74A3B] w-full text-white py-2.5 rounded-lg font-medium transition"
             >
               Create Event
             </button>
@@ -468,3 +477,5 @@ export default function CreateEventPage() {
     </div>
   );
 }
+
+export default CreateEventPage;
