@@ -21,13 +21,15 @@ export default function Navbar() {
     <header className="w-full bg-[#180507] border-b border-white/10 px-6 lg:px-16 py-4 flex items-center justify-between relative z-50">
       {/* ===== Left Section: Logo ===== */}
       <div className="flex items-center gap-3">
-        <Image
-          src={Logo}
-          alt="Lively Events Logo"
-          width={110}
-          height={40}
-          priority
-        />
+        <Link href="/back-office" aria-label="Back office home">
+          <Image
+            src={Logo}
+            alt="Lively Events Logo"
+            width={110}
+            height={40}
+            priority
+          />
+        </Link>
       </div>
 
       {/* ===== Center Section: Navigation Tabs ===== */}
@@ -109,7 +111,7 @@ export default function Navbar() {
 
           {/* Create Event Button in Mobile */}
           <Link
-            href="/back-office/events/create"
+            href="back-office/events/create"
             onClick={() => setMenuOpen(false)}
             className="mt-4 flex items-center gap-2 bg-[#C13927] hover:bg-[#a8181d] text-white font-urbanist text-sm font-medium rounded-[6px] px-4 py-2 transition-all duration-300"
           >

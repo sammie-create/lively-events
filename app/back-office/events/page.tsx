@@ -491,9 +491,9 @@ export default function EventsPage() {
             <p className="max-w-lg mb-8 text-sm text-gray-300 font-urbanist">
               {`You have no ${activeTab} events. ${activeTab === "upcoming" ? "Try creating one!" : ""}`}
             </p>
-            <button className="flex items-center bg-[#C13927] hover:bg-[#e74a3b] transition text-white px-12 py-2.5 rounded-md text-sm font-urbanist font-medium">
+            {/* <button className="flex items-center bg-[#C13927] hover:bg-[#e74a3b] transition text-white px-12 py-2.5 rounded-md text-sm font-urbanist font-medium">
               <span className="mr-2 text-lg">+</span> Create New Event
-            </button>
+            </button> */}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 mt-10 max-w-[1100px] mx-auto">
@@ -538,7 +538,9 @@ export default function EventsPage() {
 
                     {/* View Event Button */}
                     <button
-                      onClick={() => router.push(`/events/${event.id}`)}
+                      onClick={() =>
+                        router.push(`/back-office/events/${event.id}`)
+                      }
                       className="w-fit bg-[#F47B20]/5 hover:bg-[#F47B20]/30 text-[#F47B20] py-2.5 px-4 text-base rounded-md font-medium transition mt-auto border border-[#F47B20]/10 flex items-center cursor-pointer"
                     >
                       View Event{" "}
