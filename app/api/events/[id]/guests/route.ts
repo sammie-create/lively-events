@@ -103,7 +103,7 @@
 //   }
 // }
 
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 // Utility to generate a neutral avatar
 const getAvatar = () =>
@@ -283,9 +283,11 @@ const mockGuests = [
 // ------------------
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
+
   try {
     const url = new URL(req.url);
 
@@ -296,7 +298,9 @@ export async function GET(
     const search = url.searchParams.get("search")?.toLowerCase() ?? "";
 
     // Filter by eventId
-    let guests = mockGuests.filter(g => g.eventId === params.id);
+    // let guests = mockGuests.filter(g => g.eventId === params.id);
+
+    let guests = mockGuests.filter(g => g.eventId === id);
 
     // Search filter
     if (search) {
